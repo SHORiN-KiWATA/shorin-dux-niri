@@ -52,7 +52,7 @@ TARGET_SOFTWARE=(
     "kitty" "xdg-terminal-exec" "bat" "fuzzel" "gpu-screen-recorder" "wf-recorder" "wl-screenrec-git"
     "ttf-jetbrains-maple-mono-nf-xx-xx" "eza" "zoxide" "starship" "jq" "fish"
     "timg" "imagemagick" "shorin-contrib-git" "fastfetch" "gdu" "btop" 
-    "shorin-screenrec-menu-git" "miyu"
+    "shorin-screenrec-menu-git" "litemiyu-bin"
     # Theming & Flatpak
     "flatpak" "bazaar" "matugen" "adw-gtk-theme" "python-pywalfox" "breeze-cursors"
     # Input Method
@@ -750,10 +750,7 @@ apply_user_configs() {
     run_hide_desktop_file
     shorin link >/dev/null 2>&1 || true
 
-    # 初始化miyu
-    if command -v miyu 2>&1; then
-	miyu fish-init
-    fi
+    setup_ai_assistant
 
 
     if command -v rime-llm-config >/dev/null 2>&1; then
@@ -838,6 +835,16 @@ remove_dotfiles() {
     fi
 }
 
+# 终端里的 AI 助手：把 LiteMiyu 集成进 fish（终端里打字直接对话）。
+# init 和 update 都跑：以前装的是旧版 Miyu，它的终端集成留在 ~/.config/fish/conf.d/miyu.fish 里，
+# 旧的 miyu 包卸掉以后每按一次回车都会报错。--replace 会先停用旧的那一份（文件改名、不删），再装上新的。
+setup_ai_assistant() {
+    if command -v litemiyu >/dev/null 2>&1; then
+        litemiyu shellhook install --shell fish --replace >/dev/null 2>&1 \
+            || warn "$(_t "Could not set up the LiteMiyu terminal integration. Run: litemiyu shellhook install --shell fish --replace" "LiteMiyu 的终端集成没有装上，可以手动运行: litemiyu shellhook install --shell fish --replace")"
+    fi
+}
+
 # ==========================================
 # 8. 路由入口 (Controller)
 # ==========================================
@@ -853,6 +860,7 @@ case "$1" in
         ask_for_sudo
         manage_software "update"
         sync_dotfiles "update" 
+        setup_ai_assistant
         ;;
     remove) remove_dotfiles ;;
     protect) manage_protection "add" "$2" ;;

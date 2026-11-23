@@ -29,30 +29,29 @@ sudo systemctl restart NetworkManager
 
 ## AI 助手
 
-### Miyu
+### LiteMiyu
 
-<https://github.com/SHORiN-KiWATA/Miyu>
+<https://github.com/miyu-agent/litemiyu>
 
-Miyu 是我做的 AI 助手，已集成进终端，终端打字直接无缝对话。
+LiteMiyu 是我做的 AI 助手，已集成进终端，终端打字直接无缝对话。
 
-- 运行 `miyu normal` 进入普通模式的 TUI
-- 运行 `miyu dev` 进入开发模式的 TUI
-- 运行 `miyu config` 进行自定义配置，支持自定义提示词、供应商、模型
+- 运行 `litemiyu` 进入全屏的 TUI
+- 运行 `litemiyu config` 进行自定义配置，支持自定义提示词、供应商、模型
 
 如果有问题可以先询问这个 AI 助手。
 
-默认使用的模型是 opencodezen 的公共密钥，但是他们砍了公共密钥的额度，所以对话几次就没额度了，建议配一个自己的，可以去 opencode 的官网注册一个 opencodezen 的账号用它们的免费额度。
+LiteMiyu 不自带模型，第一次使用要先配置一家供应商：在终端里随便打一句话，照提示按 Enter 就会进入配置引导；也可以直接运行 `litemiyu`。
 
 #### 卸载
 
-想移除 Miyu 的话运行下面的命令：
+想移除 LiteMiyu 的话运行下面的命令：
 
 ```bash
 # 先移除和终端的集成
-miyu remove-shell-hook
+litemiyu shellhook uninstall --shell fish
 
 # 然后删除包
-yay -Rns miyu
+yay -Rns litemiyu-bin
 ```
 
 ## 重要按键
